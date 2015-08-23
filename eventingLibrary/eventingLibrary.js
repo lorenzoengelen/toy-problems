@@ -20,7 +20,21 @@
  * - It is not necessary to write a way to remove listeners.
  */
 
-var mixEvents = function(obj) {
-  // TODO: Your code here
+var mixEvents = function (obj) {
+  var eventsMap = {}; // { eventName: [ array of callbacks associated with eventName ] }
+
+  obj.on = function (eventName, cb) {
+    eventsMap[eventName] = eventsMap[eventName] || [];
+    eventsMap[eventName].push(cb);
+  };
+
+  obj.trigger = function (eventName) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    var arrayOfCb = eventsMap[eventName] || [];
+    arrayOfCb.forEach(function (cb) {
+      cb.apply(obj, args);
+    });
+  };
+
   return obj;
 };
