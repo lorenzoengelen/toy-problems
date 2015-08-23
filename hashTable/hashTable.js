@@ -3,21 +3,50 @@
  * The hashtable does not need to resize but it should still handle collisions.
  */
 
-var makeHashTable = function(){
+var makeHashTable = function () {
   var result = {};
   var storage = [];
   var storageLimit = 1000;
 
-  result.insert = function(/*...*/){
-    // TODO: implement `insert()`
+  result.insert = function (key, value) {
+    var idx = getIndexBelowMaxForKey(key, storageLimit);
+    var bucket = storage[idx] || [];
+    var len = bucket.length;
+
+    for (var i = 0; i < len; i += 1) {
+      if (bucket[i][0] === key) {
+        bucket[i][1] = value;
+        return;
+      }
+    }
+
+    bucket.push([key, value]);
+    storage[idx] = bucket;
   };
 
-  result.retrieve = function(/*...*/){
-    // TODO: implement `retrieve()`
+  result.retrieve = function (key) {
+    var idx = getIndexBelowMaxForKey(key, storageLimit);
+    var bucket = storage[idx] || [];
+    var len = bucket.length;
+
+    for (var i = 0; i < len; i += 1) {
+      if (bucket[i][0] === key) return bucket[i][1];
+    }
+    return null;
   };
 
-  result.remove = function(/*...*/){
-    // TODO: implement `remove()`
+  result.remove = function (key) {
+    var idx = getIndexBelowMaxForKey(key, storageLimit);
+    var bucket = storage[idx] || [];
+    var len = bucket.length;
+
+    for (var i = 0; i < len; i += 1) {
+      if (bucket[i][0] === key) {
+        var remove = bucket.splice(i, 1);
+        return remove;
+      }
+    }
+    return null;
   };
 
   return result;
