@@ -24,6 +24,19 @@ makeChange(1) === 1
 makeChange(2) === 2
 */
 
-var makeChange = function(total){
+var makeChange = function (total) {
+  var inner = function (total, possibleCoins) {
+    if (total  <  0) return 0;
+    if (total === 0) return 1;
 
+    return possibleCoins.reduce(function (result, currentCoin) {
+      return result + inner(total - currentCoin, availableCoins(currentCoin));
+    }, 0);
+  };
+
+  return inner(total, availableCoins(total));
+};
+
+var availableCoins = function (total) {
+  return [200, 100, 50, 20, 10, 5, 2, 1].filter(function (coin) { return coin <= total; });
 };
