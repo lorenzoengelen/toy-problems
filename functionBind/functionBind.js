@@ -23,8 +23,12 @@
  *
 */
 
-var bind = function() {
-  // TODO: Your code here
+var bind = function (fn, context) {
+  var outerArgs = Array.prototype.slice.call(arguments, 2);
+  return function () {
+    var innerArgs = Array.prototype.slice.call(arguments);
+    return fn.apply(context, outerArgs.concat(innerArgs));
+  };
 };
 
 /*
@@ -52,6 +56,11 @@ var bind = function() {
  *
 */
 
-Function.prototype.bind = function() {
-  // TODO: Your code here
+Function.prototype.bind = function (context) {
+  var fn = this;
+  var outerArgs = Array.prototype.slice.call(arguments, 1);
+  return function () {
+    var innerArgs = Array.prototype.slice.call(arguments);
+    return fn.apply(context, outerArgs.concat(innerArgs));
+  };
 };
